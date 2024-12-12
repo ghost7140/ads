@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdbool.h>
+#define INF 9999 // Represents infinity
+int findMinVertex(int distance[], bool visited[], int n) {
+ int min = INF, minIndex = -1;
+ for (int i = 0; i < n; i++) {
+ if (!visited[i] && distance[i] < min) {
+min = distance[i];
+ minIndex = i;
+ }
+ }
+ return minIndex;
+}
+void primMST(int n, int graph[n][n]) {
+ int distance[n]; 
+ bool visited[n]; 
+ for (int i = 0; i < n; i++) {
+ distance[i] = INF;
+ visited[i] = false;
+ }
+ distance[0] = 0; 
+ for (int count = 0; count < n - 1; count++) {
+ int u = findMinVertex(distance, visited, n);
+ visited[u] = true; 
+ for (int v = 0; v < n; v++) {
+ if (graph[u][v] != 0 && !visited[v] && graph[u][v] < distance[v]) {
+ distance[v] = graph[u][v];
+ }
+ }
+ }
+ printf("Distance Array:\n");
+ for (int i = 0; i < n; i++) {
+ printf("%d ", distance[i]);
+ }
+ printf("\n");
+}
+int main() {
+ int n;
+ printf("Enter the number of nodes: ");
+ scanf("%d", &n);
+ int graph[n][n];
+ printf("Enter the adjacency matrix:\n");
+for (int i = 0; i < n; i++) {
+ for (int j = 0; j < n; j++) {
+ scanf("%d", &graph[i][j]);
+ }
+ }
+ primMST(n, graph);
+ return 0;
+}
