@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+#define EMPTY -1
+#define DELETED -2
+
+void insert(int hashTable[], int size, int element) {
+    int index = element % size;
+    int i = 0;
+    int newIndex;
+
+    while (i < size) {
+        newIndex = (index + i * i) % size;
+        if (hashTable[newIndex] == EMPTY || hashTable[newIndex] == DELETED) {
+            hashTable[newIndex] = element;
+            printf("Inserting %d in index %d\n", element, newIndex);
+            return;
+        } else {
+            printf("Inserting %d in index %d -> Collision\n", element, newIndex);
+        }
+        i++;
+    }
+
+    // If we have checked all indices and didn't find a spot, the table is full.
+    printf("Hash table is full. Cannot insert %d\n", element);
+}
+
+void displayHashTable(int hashTable[], int size) {
+    printf("\nHash Table:\n");
+    for (int i = 0; i < size; i++) {
+        if (hashTable[i] == EMPTY) {
+            printf("Element at position %d: -1\n", i);
+        } else if (hashTable[i] == DELETED) {
+            printf("Element at position %d: DELETED\n", i);
+        } else {
+            printf("Element at position %d: %d\n", i, hashTable[i]);
+        }
+    }
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    // Calculate size of the hash table
+    int size = n + n / 2;
+    int hashTable[size];
+
+    // Initialize the hash table
+    for (int i = 0; i < size; i++) {
+        hashTable[i] = EMPTY;
+    }
+
+    // Read the elements and insert them into the hash table
+    int element;
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &element);
+        insert(hashTable, size, element);
+    }
+
+    // Display the hash table
+    displayHashTable(hashTable, size);
+
+    return 0;
+}
