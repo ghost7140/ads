@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <limits.h>
+#define INF 999999
+int bellmanFord(int graph[100][100], int N, int src) {
+ int dist[N];
+ for (int i = 0; i < N; i++) {
+ dist[i] = INF;
+ }
+ dist[src] = 0;
+ for (int i = 0; i < N - 1; i++) {
+ for (int u = 0; u < N; u++) {
+ for (int v = 0; v < N; v++) {
+ if (graph[u][v] != 0 && dist[u] != INF && dist[u] + graph[u][v] < dist[v]) {
+ dist[v] = dist[u] + graph[u][v];
+ }
+ }
+ }
+ }
+ for (int u = 0; u < N; u++) {
+ for (int v = 0; v < N; v++) {
+ if (graph[u][v] != 0 && dist[u] != INF && dist[u] + graph[u][v] < dist[v]) {
+ return -1; // Negative cycle detected
+ }
+ }
+ }
+ for (int i = 0; i < N; i++) {
+ if (dist[i] == INF) {
+ printf("INF ");
+ } else {
+ printf("%d ", dist[i]);
+ }
+ }
+ return 0; 
+}
+int main() {
+int N, src;
+ scanf("%d", &N);
+ int graph[100][100];
+ scanf("%d", &src)
+ for (int i = 0; i < N; i++) {
+ for (int j = 0; j < N; j++) {
+ scanf("%d", &graph[i][j]);
+ }
+ }
+ int result = bellmanFord(graph, N, src);
+ if (result == -1) {
+ printf("Negative Cycle Detected\n");
+ }
+ return 0;
+}
