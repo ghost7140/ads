@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TABLE_SIZE 7
+
+// Define the node structure for linked list
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// Function prototypes
+int hashFunction(int key);
+Node* createNode(int key);
+void insert(Node* hashTable[], int key);
+void display(Node* hashTable[]);
+
+int main() {
+    Node* hashTable[TABLE_SIZE] = {NULL}; // Initialize hash table with NULL
+    
+    int n;
+    // Read the number of elements
+    scanf("%d", &n);
+    
+    // Read and insert elements into hash table
+    for (int i = 0; i < n; i++) {
+        int element;
+        scanf("%d", &element);
+        insert(hashTable, element);
+    }
+    
+    // Display the hash table
+    display(hashTable);
+    
+    return 0;
+}
+
+// Hash function
+int hashFunction(int key) {
+    return key % TABLE_SIZE;
+}
+
+// Create a new node
+Node* createNode(int key) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = key;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Insert function with separate chaining
+void insert(Node* hashTable[], int key) {
+    int index = hashFunction(key);
+    Node* newNode = createNode(key);
+    
+    // Insert at the beginning of the linked list
+    if (hashTable[index] == NULL) {
+        hashTable[index] = newNode;
+    } else {
+        Node* current = hashTable[index];
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+}
+
+// Display the hash table
+void display(Node* hashTable[]) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        printf("at index %d\n", i);
+        if (hashTable[i] == NULL) {
+            printf("No Hash Entry\n");
+        } else {
+            Node* current = hashTable[i];
+            while (current != NULL) {
+                printf("%d->", current->data);
+                current = current->next;
+            }
+            printf("\n");
+        }
+    }
+}
